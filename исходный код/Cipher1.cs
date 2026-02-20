@@ -9,20 +9,23 @@ namespace lab1
     public static class Cipher1
     {
 
-        public static int[] GetColumnOrder(string key)
+        public static int[] GetColumnRanks(string key)
         {
-            return key
-                .Select((ch, idx) => new
-                {
-                    LetterIndex = ch - 'A', 
-                    idx
-                })
-                .OrderBy(x => x.LetterIndex)
-                .ThenBy(x => x.idx)
-                .Select(x => x.idx)
-                .ToArray();
-        }
+            var sorted = key
+                .Select((ch, index) => new { ch, index })
+                .OrderBy(x => x.ch)
+                .ThenBy(x => x.index)
+                .ToList();
 
+            int[] ranks = new int[key.Length];
+
+            for (int i = 0; i < sorted.Count; i++)
+            {
+                ranks[sorted[i].index] = i + 1;
+            }
+
+            return ranks;
+        }
         public static string checkKey(string key)
         {
             var sb = new System.Text.StringBuilder();
@@ -38,88 +41,119 @@ namespace lab1
             return sb.ToString();
         }
 
-        public static string ColumnEncrypt(string text, string key)
+        
+        private static List<List<char>> BuildTable(string text, int[] ranks)
         {
-            int cols = key.Length;
-            int rows = (int)Math.Ceiling((double)text.Length / cols);
-
-            char[,] table = new char[rows, cols];
+            var table = new List<List<char>>();
             int k = 0;
+            int row = 0;
+            int cols = ranks.Length;
 
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < cols; j++)
+            while (k < text.Length)
+            {
+                int currentRank = (row % cols) + 1;
 
-                    table[i, j] = (k < text.Length) ? text[k++] : ' ';
+                // ищу столбец с таким рангом
+                int colIndex = Array.IndexOf(ranks, currentRank);
 
-            int[] order = Cipher1.GetColumnOrder(key);
+                int len = colIndex + 1;
+
+                var currentRow = new List<char>();
+
+                for (int i = 0; i < len && k < text.Length; i++)
+                {
+                    currentRow.Add(text[k++]);
+                }
+
+                table.Add(currentRow);
+                row++;
+            }
+
+            return table;
+        }
+
+
+        public static string ColumnEncryptImproved(string text, string key)
+        {
+            key = checkKey(key);
+            text = new string(text.Where(char.IsLetter).Select(char.ToUpper).ToArray());
+
+            int[] ranks = GetColumnRanks(key);
+
+            var table = BuildTable(text, ranks);
+
+            var order = ranks
+                .Select((rank, idx) => new { rank, idx })
+                .OrderBy(x => x.rank)
+                .Select(x => x.idx)
+                .ToArray();
+
             StringBuilder result = new StringBuilder();
 
             foreach (int col in order)
             {
-
-                for (int i = 0; i < rows; i++)
-                    result.Append(table[i, col]);
-
-            }
-
-            return result.ToString();
-        }
-
-       public static string DoubleColumnEncrypt(string text, string key1, string key2)
-        {
-            string first = ColumnEncrypt(text, key1);
-            string result = first.Replace(" ", "");
-            string second = ColumnEncrypt(result, key2);
-
-            return second;
-        }
-
-
-        public static string ColumnDecrypt(string text, string key)
-        {
-            int cols = key.Length;
-            int rows = (int)Math.Ceiling((double)text.Length / cols);
-            
-            int baseLen = text.Length / cols;
-            int extra = text.Length % cols;
-
-            char[,] table = new char[rows, cols];
-            int[] order = GetColumnOrder(key);
-            int k = 0;
-
-            foreach (int col in order)
-            {
-                int currentColLen = baseLen;
-
-                if ((col+1) <= extra)
-                    currentColLen = baseLen + 1;
-
-                for (int i = 0; i < currentColLen; i++)
+                for (int i = 0; i < table.Count; i++)
                 {
-                    table[i, col] = text[k++];
+                    if (col < table[i].Count)
+                        result.Append(table[i][col]);
                 }
             }
 
-            StringBuilder result = new StringBuilder();
-
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < cols; j++)
-                    result.Append(table[i, j]);
-
             return result.ToString();
         }
 
-        public static string DoubleColumnDecrypt(string text, string key1, string key2)
+
+        public static string ColumnDecryptImproved(string cipher, string key)
         {
+            key = checkKey(key);
+            cipher = new string(cipher.Where(char.IsLetter).Select(char.ToUpper).ToArray());
 
-            string first = ColumnDecrypt(text, key2);
-            string result = first.TrimEnd('\0');
-            string second = ColumnDecrypt(result, key1);
-            return second;
+            int[] ranks = GetColumnRanks(key);
+            int cols = key.Length;
+
+            // Строится форма таблицы
+            var shapeTable = BuildTable(new string('X', cipher.Length), ranks);
+
+            int rows = shapeTable.Count;
+
+            // порядок столбцов
+            var order = ranks
+                .Select((rank, idx) => new { rank, idx })
+                .OrderBy(x => x.rank)
+                .Select(x => x.idx)
+                .ToArray();
+
+            char[][] table = new char[rows][];
+            for (int i = 0; i < rows; i++)
+                table[i] = new char[shapeTable[i].Count];
+
+            int k = 0;
+
+            // заполняю столбцы
+            foreach (int col in order)
+            {
+                for (int i = 0; i < rows; i++)
+                {
+                    if (col < table[i].Length)
+                    {
+                        table[i][col] = cipher[k++];
+                    }
+                }
+            }
+
+            // читаю построчно
+            StringBuilder result = new StringBuilder();
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < table[i].Length; j++)
+                {
+                    result.Append(table[i][j]);
+                }
+            }
+
+            return result.ToString();
         }
-
-
-
 
 
     }

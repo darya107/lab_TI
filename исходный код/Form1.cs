@@ -17,6 +17,8 @@ namespace lab1
         public Form1()
         {
             InitializeComponent();
+            buttonCode.Enabled = false;
+            buttonDec.Enabled = false;
         }
 
 
@@ -32,10 +34,10 @@ namespace lab1
                 .Select(char.ToUpper)
                 .ToArray()
                 );
+                input = input.Replace(" ", "").ToUpper();
+                string key = Cipher1.checkKey(textBox1.Text);
 
-                string key = Cipher1.checkKey(textBox1.Text); 
-                string key2 = Cipher1.checkKey(textBox4.Text);
-                result = Cipher1.DoubleColumnEncrypt(input, key, key2);
+                result = Cipher1.ColumnEncryptImproved(input, key);
                 textBox2.Text = result;
             }
 
@@ -73,8 +75,8 @@ namespace lab1
 
                 string key = Cipher1.checkKey(textBox1.Text);
 
-                string key2 = Cipher1.checkKey(textBox4.Text);
-                result = Cipher1.DoubleColumnDecrypt(input, key, key2);
+              
+                result = Cipher1.ColumnDecryptImproved(input, key);
                 textBox2.Text = result;
 
             }
@@ -131,17 +133,7 @@ namespace lab1
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton1.Checked)
-            {
-                textBox4.Visible = true;  
-                label1.Visible = true;
-                
-            }
-            else
-            {
-                textBox4.Visible = false;  
-                label1.Visible = false;
-            }
+           
         }
 
         private void buttonDec_Click(object sender, EventArgs e)
@@ -167,6 +159,21 @@ namespace lab1
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка сохранения: " + ex.Message);
+            }
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+           
+            if (string.IsNullOrWhiteSpace(textBox3.Text))
+            {
+                buttonDec.Enabled = false;
+                buttonCode.Enabled = false;
+            }
+            else
+            {
+                buttonDec.Enabled = true;
+                buttonCode.Enabled = true;
             }
         }
     }
