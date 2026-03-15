@@ -40,6 +40,7 @@
             label5 = new Label();
             buttonOpenF = new Button();
             buttonWriteInF = new Button();
+            button2 = new Button();
             SuspendLayout();
             // 
             // textBox1
@@ -105,7 +106,7 @@
             // 
             button1.BackColor = Color.HotPink;
             button1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button1.Location = new Point(522, 22);
+            button1.Location = new Point(526, 22);
             button1.Name = "button1";
             button1.Size = new Size(183, 52);
             button1.TabIndex = 6;
@@ -121,7 +122,7 @@
             textBoxKey.ScrollBars = ScrollBars.Both;
             textBoxKey.Size = new Size(313, 477);
             textBoxKey.TabIndex = 7;
-            textBoxKey.TextChanged += textBox4_TextChanged;
+         
             // 
             // label4
             // 
@@ -141,11 +142,11 @@
             label5.Size = new Size(31, 20);
             label5.TabIndex = 9;
             label5.Text = "0/0";
-            label5.TextChanged += label5_TextChanged;
+           
             // 
             // buttonOpenF
             // 
-            buttonOpenF.Location = new Point(720, 22);
+            buttonOpenF.Location = new Point(715, 22);
             buttonOpenF.Name = "buttonOpenF";
             buttonOpenF.Size = new Size(148, 52);
             buttonOpenF.TabIndex = 10;
@@ -155,7 +156,7 @@
             // 
             // buttonWriteInF
             // 
-            buttonWriteInF.Location = new Point(874, 22);
+            buttonWriteInF.Location = new Point(869, 22);
             buttonWriteInF.Name = "buttonWriteInF";
             buttonWriteInF.Size = new Size(148, 52);
             buttonWriteInF.TabIndex = 11;
@@ -163,12 +164,23 @@
             buttonWriteInF.UseVisualStyleBackColor = true;
             buttonWriteInF.Click += buttonWriteInF_Click;
             // 
+            // button2
+            // 
+            button2.Location = new Point(1023, 22);
+            button2.Name = "button2";
+            button2.Size = new Size(132, 52);
+            button2.TabIndex = 12;
+            button2.Text = "очистить";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Plum;
-            ClientSize = new Size(1074, 625);
+            ClientSize = new Size(1158, 625);
+            Controls.Add(button2);
             Controls.Add(buttonWriteInF);
             Controls.Add(buttonOpenF);
             Controls.Add(label5);
@@ -185,7 +197,7 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
-            Load += Form1_Load;
+           
             ResumeLayout(false);
             PerformLayout();
         }
@@ -204,5 +216,6 @@
         private Label label5;
         private Button buttonOpenF;
         private Button buttonWriteInF;
+        private Button button2;
     }
 }

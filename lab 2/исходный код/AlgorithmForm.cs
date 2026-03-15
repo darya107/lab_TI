@@ -26,40 +26,20 @@ namespace labSecond
             return state;
         }
 
-
-
-
-        //private int LfsrNextBit(bool[] state)
-        //{
-        //    bool feedback = state[33] ^ state[14] ^ state[13] ^ state[0];
-
-        //    for (int i = 33; i > 0; i--)
-        //    {
-        //        state[i] = state[i - 1];
-        //    }
-
-        //    state[0] = feedback;
-
-        //    return feedback ? 1 : 0;
-        //}
         private int LfsrNextBit(bool[] state)
         {
-            // бит, который идет в ключ (последний разряд регистра)
+            // return bit
             bool outputBit = state[33];
 
-            // вычисление обратной связи
             bool feedback = state[33] ^ state[14] ^ state[13] ^ state[0];
 
-            // сдвиг регистра
+            // shift register
             for (int i = 33; i > 0; i--)
             {
                 state[i] = state[i - 1];
             }
-
-            // запись feedback в первый разряд
             state[0] = feedback;
 
-            // возвращаем именно выходной бит
             return outputBit ? 1 : 0;
         }
 
@@ -107,10 +87,6 @@ namespace labSecond
             return sb.ToString();
         }
 
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -120,20 +96,11 @@ namespace labSecond
             }
         }
 
-        private void label5_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             label5.Text = textBox1.Text.Length + "/34";
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void buttonOpenF_Click(object sender, EventArgs e)
         {
@@ -142,8 +109,6 @@ namespace labSecond
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 originalBytes = File.ReadAllBytes(dialog.FileName);
-
-                // textBoxInput.Text = BytesToBitString(originalBytes);
                 textBoxInput.Text = BytesToBitStringPreview(originalBytes);
 
             }
@@ -176,7 +141,7 @@ namespace labSecond
             processedBytes = ProcessBytes(originalBytes, bits, out keyBits);
 
             textBoxKey.Text = BitStringPreview(keyBits);
-            
+
             textBoxOutput.Text = BytesToBitStringPreview(processedBytes);
         }
 
@@ -189,13 +154,13 @@ namespace labSecond
                    bits.Substring(bits.Length - lastBits);
         }
 
+        
         private string BytesToBitStringPreview(byte[] data, int firstBits = 100, int lastBits = 50)
         {
             StringBuilder sb = new StringBuilder();
 
             int totalBits = data.Length * 8;
 
-            // если данных мало — выводим всё
             if (totalBits <= firstBits + lastBits)
             {
                 foreach (byte b in data)
@@ -204,7 +169,6 @@ namespace labSecond
                 return sb.ToString();
             }
 
-            // первые биты
             int firstBytes = (firstBits + 7) / 8;
 
             for (int i = 0; i < firstBytes; i++)
@@ -214,7 +178,7 @@ namespace labSecond
 
             sb.Clear();
 
-            // последние биты
+            // last bits
             int lastBytes = (lastBits + 7) / 8;
 
             for (int i = data.Length - lastBytes; i < data.Length; i++)
@@ -244,6 +208,13 @@ namespace labSecond
         private void textBoxInput_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBoxInput.Clear();
+            textBoxOutput.Clear();
+            textBoxKey.Clear();
         }
     }
 }
