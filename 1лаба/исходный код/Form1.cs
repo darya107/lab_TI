@@ -24,6 +24,13 @@ namespace lab1
 
         public void proccesText()
         {
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                MessageBox.Show("Введите ключ!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string result;
 
             if (radioButton1.Checked)
@@ -61,6 +68,13 @@ namespace lab1
 
         public void proccesText1()
         {
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                MessageBox.Show("Введите ключ!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string result;
 
             if (radioButton1.Checked)
@@ -175,6 +189,11 @@ namespace lab1
                 buttonDec.Enabled = true;
                 buttonCode.Enabled = true;
             }
+        }
+
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
         }
     }
 }
