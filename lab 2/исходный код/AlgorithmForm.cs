@@ -26,6 +26,7 @@ namespace labSecond
             return state;
         }
 
+        //один ход сдвигового регистра
         private int LfsrNextBit(bool[] state)
         {
             // return bit
@@ -126,7 +127,7 @@ namespace labSecond
 
             if (originalBytes == null)
             {
-                MessageBox.Show("Сначала загрузите файл");
+                MessageBox.Show("Сначала нужно загрузить файл");
                 return;
             }
 
@@ -154,7 +155,7 @@ namespace labSecond
                    bits.Substring(bits.Length - lastBits);
         }
 
-        
+
         private string BytesToBitStringPreview(byte[] data, int firstBits = 100, int lastBits = 50)
         {
             StringBuilder sb = new StringBuilder();
@@ -207,7 +208,7 @@ namespace labSecond
 
         private void textBoxInput_TextChanged(object sender, EventArgs e)
         {
-
+             
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -215,6 +216,11 @@ namespace labSecond
             textBoxInput.Clear();
             textBoxOutput.Clear();
             textBoxKey.Clear();
+        }
+
+        private void textBoxKey_TextChanged(object sender, EventArgs e)
+        {
+             
         }
     }
 }

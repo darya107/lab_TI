@@ -122,7 +122,7 @@
             textBoxKey.ScrollBars = ScrollBars.Both;
             textBoxKey.Size = new Size(313, 477);
             textBoxKey.TabIndex = 7;
-         
+            textBoxKey.TextChanged += textBoxKey_TextChanged;
             // 
             // label4
             // 
@@ -142,7 +142,6 @@
             label5.Size = new Size(31, 20);
             label5.TabIndex = 9;
             label5.Text = "0/0";
-           
             // 
             // buttonOpenF
             // 
@@ -197,7 +196,6 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
-           
             ResumeLayout(false);
             PerformLayout();
         }
